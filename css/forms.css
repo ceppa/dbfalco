@@ -1,0 +1,45 @@
+table.form
+{
+	border-collapse: collapse;
+	margin:0px;
+	padding:0px;
+	border:1px solid #CCF;
+	margin-left:5px;
+	margin-bottom:10px;
+}
+
+
+
+table.form tr:first-child td
+{
+	text-align:center;
+	font-weight:bold;
+	background-color:#EEF;
+	border:1px solid #CCF;
+}
+
+table.form input.submit,input.cancel
+{
+	background-color:#EEF;
+}
+
+table.form td
+{
+	padding: 2px 5px 2px 5px;
+}
+table.form tr
+{
+	height:23px;
+}
+
+table.form td.formTitle
+{
+	font-weight:bold;
+	background-color:#EEF;
+}
+
+.exists
+{
+	display:none;
+	color:red;
+}

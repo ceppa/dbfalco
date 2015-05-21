@@ -1,0 +1,13 @@
+UPDATE
+						items
+					INNER JOIN 
+					(
+						SELECT i2.id
+						FROM `items_grouped` AS i1
+							INNER JOIN `items_grouped` AS i2
+							ON i1.id='15748' AND IFNULL(i1.sn,'')=IFNULL(i2.sn,'') AND i1.location=i2.location AND i1.position=i2.position
+								AND i1.id_parts=i2.id_parts AND IFNULL(i1.id_owners,'')=IFNULL(i2.id_owners,'')  AND i1.id_places=i2.id_places
+						ORDER BY i2.id
+						LIMIT 2
+					) AS items2 
+					ON items.id=items2.id SET `items`.sn='',`items`.licence_name='LACCI MS3367-4-4',`items`.licence_number='',`items`.licence_prog='',`items`.licence_type='3',`items`.id_owners='2',`items`.location='E6',`items`.position='' WHERE `items`.id='15748'<br>Can't update table 'movements_items' in stored function/trigger because it is already used by statement which invoked this stored function/trigger.

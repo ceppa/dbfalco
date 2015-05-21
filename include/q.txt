@@ -1,0 +1,62 @@
+INSERT INTO items
+					(
+						id_parts,
+						sn,
+						licence_type,
+						licence_number,
+						licence_name,
+						licence_prog,
+						id_owners,
+						id_users_creator,
+						id_users_updater
+					)
+					VALUES
+					(
+						'619',
+						null,
+						2,
+						'27942a',
+						'Wescam MX-15HDia',
+						'27942p',
+						2,
+						'1',
+						'1'
+					)Array
+(
+    [date] => 2015-05-14 13:52:56
+    [id_places_from] => 1_3
+    [id_places_to] => 2_1
+    [note] => 
+    [docfile_0] => 
+    [docdesc_0] => 
+    [op] => do_add
+    [pn_1] => 148H2010-01
+    [id_parts_1] => 619
+    [chk_619_14065] => on
+    [snni_619_14065] => 425801488
+    [qty_619_14065] => 1
+    [loc_619_14065] => 
+    [pos_619_14065] => 
+    [chkni_619_1] => on
+    [lnani_619_1] => Wescam MX-15HDia
+    [lnuni_619_1] => 27942a
+    [lprni_619_1] => 27942p
+    [ltyni_619_1] => 2
+    [ownni_619_1] => 2
+    [snni_619_1] => 
+    [qtyni_619_1] => 10
+    [locni_619_1] => 
+    [posni_619_1] => 
+    [lnani_619_2] => 
+    [lnuni_619_2] => 
+    [lprni_619_2] => 
+    [ltyni_619_2] => 0
+    [ownni_619_2] => 0
+    [snni_619_2] => 
+    [qtyni_619_2] => 
+    [locni_619_2] => 
+    [posni_619_2] => 
+    [pn_2] => 
+    [id_parts_2] => 0
+    [sn_2] => 
+)
