@@ -2,9 +2,9 @@
 
 	class mysqlConnection
 	{
-		private $dbname="dbfalco";
+		private $dbname="hightecs_dbfalco";
 		private $myhost="localhost";
-		private $myuser="envysoft";
+		private $myuser="hightecs_envy";
 		private $mypass="minair";
 		private $mysqli;
 

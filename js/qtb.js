@@ -9,14 +9,14 @@ function buildQtbMenu()
 		var body="";
 		$.ajax({
 			type:'POST',
-			url:'include/qtb.php', 
-			data: 
+			url:'include/qtb.php',
+			data:
 				{
 					op:"showUavMenu"
 				},
 			cache: false,
 			async: false
-		}).done(function(data) 
+		}).done(function(data)
 			{
 				data=getData(data);
 				if(data.length==0)
@@ -37,7 +37,11 @@ function buildQtbMenu()
 		if(ok)
 			$("#content").prepend(body);
 	}
-		
+	else
+	{
+		$('#div_QtbUavSelect a').remove();
+	}
+
 	return ok;
 }
 
@@ -59,7 +63,7 @@ function menu_qtb_list_click()
 				}
 			   );
 
-		$("#div_QtbUavSelect span").click(function()
+		$("#div_QtbUavSelect span").unbind("click").click(function()
 			{
 				var id_uav=this.id.split("_")[1];
 				if(id_uav=="incomplete")
@@ -96,87 +100,87 @@ function qtbList(id_uav)
 			params: [{name:'op',value:'list'},{name:'uav_id',value:id_uav}],
 			dataType: 'json',
 			showToggleBtn: false,
-			colModel : 
+			colModel :
 			[
 				{
-					display: 'Data', 
-					name : 'qtb.record_data', 
-					width : 150, 
-					sortable : true, 
+					display: 'Data',
+					name : 'qtb.record_data',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'From', 
-					name : 'airport_from.IATA', 
-					width : 150, 
-					sortable : true, 
+					display: 'From',
+					name : 'airport_from.IATA',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'To', 
-					name : 'airport_to.IATA', 
-					width : 150, 
-					sortable : true, 
+					display: 'To',
+					name : 'airport_to.IATA',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Pilot', 
-					name : 'pilot', 
-					width : 150, 
-					sortable : true, 
+					display: 'Pilot',
+					name : 'pilot',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Pilot 2', 
-					name : 'pilot_2', 
-					width : 150, 
-					sortable : true, 
+					display: 'Pilot 2',
+					name : 'pilot_2',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Pilot 3', 
-					name : 'pilot_3', 
-					width : 150, 
-					sortable : true, 
+					display: 'Pilot 3',
+					name : 'pilot_3',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Pilot 4', 
-					name : 'pilot_4', 
-					width : 150, 
-					sortable : true, 
+					display: 'Pilot 4',
+					name : 'pilot_4',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				}
 			],
-			buttons : 
+			buttons :
 			[
 				{
-					name: 'Add', 
-					bclass: 'add', 
+					name: 'Add',
+					bclass: 'add',
 					onpress : qtbAdd
 				},
 				{
-					name: 'Edit', 
-					bclass: 'edit', 
+					name: 'Edit',
+					bclass: 'edit',
 					onpress : qtbEdit
 				},
 				{
 					separator: true
-				}			
+				}
 			],
-			searchitems : 
+			searchitems :
 			[
 				{
-					display: 'Data', 
+					display: 'Data',
 					name : 'qtb.record_data',
 					isdefault: true
 				},
 				{
-					display: 'From', 
+					display: 'From',
 					name : 'airport_from.IATA'
 				},
 				{
-					display: 'To', 
+					display: 'To',
 					name : 'airport_to.IATA'
 				}
 			],
@@ -207,6 +211,7 @@ function qtbList(id_uav)
 	else
 		$('.sDiv').hide();*/
 	showDiv("div_flexi,div_QtbUavSelect");
+	checkBsdComplete(id_uav,"9999-99-99");
 
 	resetButtons();
 }
@@ -227,8 +232,8 @@ function qtb_row_selected_click(itemId,row,grid)
 function qtbAdd()
 {
 	showWait("div_QtbUavSelect");
-	$.post('include/qtb.php', { op: "add"}, 
-		function(data) 
+	$.post('include/qtb.php', { op: "add"},
+		function(data)
 		{
 			data=getData(data);
 			$('#div_main').html(data.form);
@@ -276,12 +281,12 @@ function qtb_form_submit()
 
 	if($("input[name='id_edit']").length)
 	{
-		if(!$("#editform").data('changed')) 
+		if(!$("#editform").data('changed'))
 		{
 			qtb_form_cancel();
 			return;
 		}
-		$("input[name='id_edit']").attr("name","replaces_qtb_id").val(function( i, val ) 
+		$("input[name='id_edit']").attr("name","replaces_qtb_id").val(function( i, val )
 			{
 				return val.split(",")[1];
 			});
@@ -325,8 +330,8 @@ function qtb_form_cancel()
 function qtbEdit()
 {
 	showWait("div_QtbUavSelect");
-	$.post('include/qtb.php', { op: "edit", id:  flexiItemId}, 
-		function(data) 
+	$.post('include/qtb.php', { op: "edit", id:  flexiItemId},
+		function(data)
 		{
 			data=getData(data);
 			$('#div_main').html(data.form);
@@ -362,7 +367,7 @@ function qtbEdit()
 			$('#submit').bind('click', qtb_form_submit);
 			$('#cancel').bind('click', qtb_form_cancel);
 			showDiv("div_main,div_QtbUavSelect");
-			$("#editform :input").change(function() 
+			$("#editform :input").change(function()
 			{
 				$(this).closest('form').data('changed', true);
 			});
@@ -372,8 +377,8 @@ function qtbEdit()
 
 function checkBsdComplete(uav_id,date)
 {
-	$.post('include/qtb.php', { op: "checkBsdComplete",date: date, uav_id:uav_id }, 
-		function(data) 
+	$.post('include/qtb.php', { op: "checkBsdComplete",date: date, uav_id:uav_id },
+		function(data)
 		{
 			data=getData(data);
 			$("#UAV_incomplete_details").html("");
@@ -392,7 +397,7 @@ function checkBsdComplete(uav_id,date)
 function buildIncompleteTable(data)
 {
 	var out=$("<table>").addClass("append");
-	$.each(data, function( index, value ) 
+	$.each(data, function( index, value )
 	{
 		out.append($("<tr>").append($("<td>").html(value.description)));
 	});
@@ -439,4 +444,3 @@ function checkPilots()
 		});
 	return out;
 }
-

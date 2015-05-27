@@ -23,7 +23,7 @@ function menu_reports_inventory_click()
 		i++;
 		options.append('<option value="'+i+'">'+i+'</option>');
 	});
-	
+
 
 	var table=$('<table></table>').attr('id','reportBuilder');
 	table
@@ -38,7 +38,7 @@ function menu_reports_inventory_click()
 				);
 
 	i=0;
-	$.each(campi, function(key, value) 
+	$.each(campi, function(key, value)
 	{
 		value=value.replace('(','POpen').replace(')','PClose').replace(' ','PSpace').replace('.','PPoint');
 		i++;
@@ -52,8 +52,8 @@ function menu_reports_inventory_click()
 						$('<td></td>').append($('<input>').attr('name','or_'+value).attr('type','text'))
 					)
 				)
-		
-		
+
+
 	});
 	table.append($('<tr></tr>').append($('<td></td>').attr('colspan','3').
 		append($('<input>').attr('type','button').val('submit').click(inventoryReportSubmit)
@@ -62,7 +62,7 @@ function menu_reports_inventory_click()
 					 })
 			)
 		));
-	$('#div_main').html('').append(table).append($('<div></div>').attr('id','inventoryReportContent'));;	
+	$('#div_main').html('').append(table).append($('<div></div>').attr('id','inventoryReportContent'));;
 	$('#selectAllButton').addClass('button').hide();
 
 	showDiv("div_main");
@@ -81,7 +81,7 @@ function inventoryReportSubmit(e)
 			data: params,
 			type: "post",
 			async: true,
-			success: function(data) 
+			success: function(data)
 			{
 				data=getData(data);
 				if(data.length>0)
@@ -212,7 +212,7 @@ function menu_reports_UAVpartslife_click()
 	if(buildQtbMenu())
 	{
 
-		$("#div_QtbUavSelect span").click(function()
+		$("#div_QtbUavSelect span").unbind("click").click(function()
 			{
 				var id_uav=this.id.split("_")[1];
 				if(id_uav=="incomplete")
@@ -249,102 +249,102 @@ function reportConfiguration(id_uav)
 			params: [{name:'op',value:'UAVpartslife'},{name:'uav_id',value:id_uav}],
 			dataType: 'json',
 			showToggleBtn: false,
-			colModel : 
+			colModel :
 			[
 				{
-					display: 'P/N', 
-					name : 'pn', 
-					width : 80, 
-					sortable : true, 
+					display: 'P/N',
+					name : 'pn',
+					width : 80,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Description', 
-					name : 'description', 
-					width : 200, 
-					sortable : true, 
+					display: 'Description',
+					name : 'description',
+					width : 200,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'S/N', 
-					name : 'items.sn', 
-					width : 80, 
-					sortable : true, 
+					display: 'S/N',
+					name : 'items.sn',
+					width : 80,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Flight hours', 
-					name : 'stick', 
-					width : 70, 
-					sortable : true, 
+					display: 'Flight hours',
+					name : 'stick',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Engine hours', 
-					name : 'hobbs', 
-					width : 70, 
-					sortable : true, 
+					display: 'Engine hours',
+					name : 'hobbs',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Landings', 
-					name : 'cycles', 
-					width : 70, 
-					sortable : true, 
+					display: 'Landings',
+					name : 'cycles',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Months', 
-					name : 'months', 
-					width : 70, 
-					sortable : true, 
+					display: 'Months',
+					name : 'months',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'FH limit', 
-					name : 'repl_flight_hours', 
-					width : 70, 
-					sortable : true, 
+					display: 'FH limit',
+					name : 'repl_flight_hours',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'EH limit', 
-					name : 'repl_engine_hours', 
-					width : 70, 
-					sortable : true, 
+					display: 'EH limit',
+					name : 'repl_engine_hours',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Landings limit', 
-					name : 'repl_cycles', 
-					width : 70, 
-					sortable : true, 
+					display: 'Landings limit',
+					name : 'repl_cycles',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Months limit', 
-					name : 'repl_months', 
-					width : 70, 
-					sortable : true, 
+					display: 'Months limit',
+					name : 'repl_months',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				}
-				
+
 			],
-			buttons : 
+			buttons :
 			[
 				{
 					separator: true
-				}			
+				}
 			],
-			searchitems : 
+			searchitems :
 			[
 				{
-					display: 'P/N', 
-					name : 'parts.pn', 
+					display: 'P/N',
+					name : 'parts.pn',
 					isdefault: true
-				},				
+				},
 				{
-					display: 'S/N', 
+					display: 'S/N',
 					name : 'items.sn'
 				}
 			],
@@ -387,64 +387,64 @@ function menu_reports_warehouselife_click()
 			params: [{name:'op',value:'UAVpartslife'}],
 			dataType: 'json',
 			showToggleBtn: false,
-			colModel : 
+			colModel :
 			[
 				{
-					display: 'P/N', 
-					name : 'pn', 
-					width : 80, 
-					sortable : true, 
+					display: 'P/N',
+					name : 'pn',
+					width : 80,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Description', 
-					name : 'description', 
-					width : 200, 
-					sortable : true, 
+					display: 'Description',
+					name : 'description',
+					width : 200,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'S/N', 
-					name : 'sn', 
-					width : 80, 
-					sortable : true, 
+					display: 'S/N',
+					name : 'sn',
+					width : 80,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Warehouse', 
-					name : 'places.description', 
-					width : 70, 
-					sortable : true, 
+					display: 'Warehouse',
+					name : 'places.description',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				},
 				{
 					display: 'Date',
-					name : 'date', 
-					width : 70, 
-					sortable : true, 
+					name : 'date',
+					width : 70,
+					sortable : true,
 					align: 'left'
 				}
-				
+
 			],
-			buttons : 
+			buttons :
 			[
 				{
 					separator: true
-				}			
+				}
 			],
-			searchitems : 
+			searchitems :
 			[
 				{
-					display: 'P/N', 
-					name : 'parts.pn', 
+					display: 'P/N',
+					name : 'parts.pn',
 					isdefault: true
-				},				
+				},
 				{
-					display: 'S/N', 
+					display: 'S/N',
 					name : 'items.sn'
-				},				
+				},
 				{
-					display: 'Warehouse', 
+					display: 'Warehouse',
 					name : 'places.description'
 				}
 			],
@@ -478,12 +478,12 @@ function menu_reports_bsd_click()
 				exportTableToCSV.apply(this, [$('#BSDReportContent'), 'export.csv']);
 				}).appendTo($("#div_QtbUavSelect"));
 
-		$("#div_QtbUavSelect span").click(function()
+		$("#div_QtbUavSelect span").unbind("click").click(function()
 			{
 				var id_uav=this.id.split("_")[1];
 				$("#UAV_incomplete").hide();
 				$("#div_QtbUavSelect span").removeClass("active");
-				$("#div_main").append($('<div></div').attr('id','BSDReportContent'));
+				$("#div_main").html($('<div></div').attr('id','BSDReportContent'));
 				$(this).addClass("active");
 				reportBSD(id_uav);
 			});
@@ -507,7 +507,7 @@ function reportBSD(id_uav)
 			data: params,
 			type: "post",
 			async: true,
-			success: function(data) 
+			success: function(data)
 			{
 				data=getData(data);
 				if(data!="")
@@ -521,7 +521,7 @@ function reportBSD(id_uav)
 					$('#BSDReportContent').append(buildBSDReport(data.uav_sn,data.uav_sign,data.rows));
 				}
 			}
-		});	
+		});
 }
 
 function buildBSDReport(uav_sn,uav_sign,rows)
