@@ -1,7 +1,7 @@
 <?
 	require_once("include/mysql.php");
 	$conn=new mysqlConnection;
-	$table="zamp";
+	$table="GCS0001";
 	$id_supplier=1;
 	$id_manufacturer=1;
 	$id_user_creator=1;
@@ -21,7 +21,7 @@
 		$description=$row["description"];
 		$sn=$row["sn"];
 		$qty=$row["qty"];
-		$qty=$row["id_owners"];
+		$id_owners=$row["id_owners"];
 		$id_places=$row["id_places"];
 		$location=$row["location"];
 		$position=$row["position"];
@@ -63,13 +63,28 @@
 			echo ("pn: $pn, sn: $sn, qty: $qty");
 			$error=1;
 		}
+
 		for($i=0;$i<$qty;$i++)
 		{
-			$q="INSERT INTO items(id_parts, id_owners, sn,licence_number,licence_type,licence_prog,licence_name,note,id_users_creator,id_users_updater) 
-				VALUES ('$id_parts','$id_owners','$sn','$licence_number','$licence_type','$licence_prog','$licence_name','$note','$id_user_creator','$id_user_updater')";
-			
-			$conn->do_query($q);
-			$id_items=$conn->insert_id();
+			$q="select * FROM items WHERE id_parts='$id_parts' AND sn='$sn'";
+			$result=$conn->do_query($q);
+			$rows=$conn->result_to_array($result,false);
+			if(count($rows))
+			{
+				echo "found pn $pn con sn $sn<br>";
+				$id_items=$rows[0]["id"];
+			}
+			else
+			{
+				echo "inserisco items $pn $sn<br>";
+				$q="INSERT INTO items(id_parts, id_owners, sn,licence_number,licence_type,licence_prog,licence_name,note,id_users_creator,id_users_updater)
+					VALUES ('$id_parts','$id_owners','$sn','$licence_number','$licence_type','$licence_prog','$licence_name','$note','$id_user_creator','$id_user_updater')";
+
+				$conn->do_query($q);
+				$id_items=$conn->insert_id();
+			}
+
+
 			$q="SELECT id FROM movements WHERE id_places_from='$id_supplier' AND id_places_to='$id_places' AND date='$arrival_date' ORDER BY date";
 			$result=$conn->do_query($q);
 			$m=$conn->result_to_array($result,false);
