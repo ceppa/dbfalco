@@ -1,2 +1,0 @@
-INSERT INTO bsd(livello,optional,just_title,pn,id_parts,id_bsd_compatible,description,uav_type_id,ordine,parent)
-			VALUES('1','','0','2010818V0100','1','1','FALCO XN - BLOCK 33 AIR VEHICLE','6','1500','0')<br>Duplicate entry '1-6' for key 'livello'

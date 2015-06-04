@@ -28,7 +28,7 @@ if($op=='list')
 	$query = $_REQUEST['query'];
 	$qtype = $_REQUEST['qtype'];
 
-	if($qtype) 
+	if($qtype)
 		$where.=" AND $qtype LIKE '%$query%'";
 
 	if(!$page || !$rp)
@@ -43,7 +43,7 @@ if($op=='list')
 	}
 	$conn=new mysqlConnection;
 
-	$sql="SELECT uav.id 
+	$sql="SELECT uav.id
 			FROM uav LEFT JOIN fleet
 			ON uav.id_fleet=fleet.id
 		$where";
@@ -54,7 +54,7 @@ if($op=='list')
 
 
 	$sql="SELECT uav.id,fleet.description AS fleet,
-			uav.marche,uav.pn,uav.sn,uav_type.description AS uav_type
+			uav.marche,uav.pn,uav.sn,uav.note,uav_type.description AS uav_type
 			FROM uav LEFT JOIN fleet
 			ON uav.id_fleet=fleet.id
 			LEFT JOIN uav_type ON uav.uav_type_id=uav_type.id
@@ -81,7 +81,8 @@ if($op=='list')
 					$row['fleet'],
 					$row['marche'],
 					$row['pn'],
-					$row['sn']
+					$row['sn'],
+					$row['note']
 				)
 		);
 	}
@@ -105,8 +106,9 @@ elseif($op=='edit')
 		"pn"=>array("value"=>"","label"=>"Part Number"),
 		"uav_type_id"=>array("value"=>"","label"=>"Type"
 			,"link"=>array("table"=>"uav_type"
-			,"id"=>"id","text"=>"description")
-		));
+			,"id"=>"id","text"=>"description")),
+		"note"=>array("value"=>"","label"=>"Note")
+		);
 
 	$id_value=substr($_POST["id"],3);
 	$id_field="id";
@@ -132,8 +134,9 @@ elseif($op=='add')
 		"pn"=>array("value"=>"","label"=>"Part Number"),
 		"uav_type_id"=>array("value"=>"","label"=>"Type"
 			,"link"=>array("table"=>"uav_type"
-			,"id"=>"id","text"=>"description")
-		));
+			,"id"=>"id","text"=>"description")),
+		"note"=>array("value"=>"","label"=>"Note")
+		);
 
 	require_once("forms.php");
 	$title="Insert new UAV";
@@ -143,6 +146,3 @@ elseif($op=='add')
 
 
 ?>
-
-
-

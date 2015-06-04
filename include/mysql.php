@@ -8,12 +8,12 @@
 		private $mypass="minair";
 		private $mysqli;
 
-		function __construct() 
+		function __construct()
 		{
 			$this->mysqli=new mysqli($this->myhost,$this->myuser,$this->mypass,$this->dbname);
 			if (mysqli_connect_errno())
 				die("Connect failed: ". mysqli_connect_error());
-	
+
 			$this->mysqli->query('SET NAMES utf8');
 		}
 
@@ -21,7 +21,7 @@
 		{
 			$this->mysqli->close();
 		}
-		
+
 		function affected_rows()
 		{
 			return $this->mysqli->affected_rows;
@@ -39,12 +39,12 @@
 				echo $message;
 			die();
 		}
-	
+
 		function insert_id()
 		{
 			return $this->mysqli->insert_id;
 		}
-	
+
 		function do_query($query,$die=true)
 		{
 			if(($result=$this->mysqli->query($query))===false)

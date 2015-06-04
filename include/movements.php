@@ -28,7 +28,7 @@ if($op=='list')
 	$query = $_REQUEST['query'];
 	$qtype = $_REQUEST['qtype'];
 
-	if($qtype) 
+	if($qtype)
 		$where.=" AND $qtype LIKE '%$query%'";
 
 	if(!$page || !$rp)
@@ -51,20 +51,20 @@ if($op=='list')
 				places_to.name AS place_to,
 				GROUP_CONCAT(DISTINCT CONCAT(parts.pn,'¹',parts.description,'¹',IFNULL(items.sn,''),'¹',qt.qty)
 					ORDER BY parts.pn,items.sn SEPARATOR '§') as pn,
-				GROUP_CONCAT(DISTINCT CONCAT(documents.id,'§',documents.description) 
-					ORDER BY documents.description SEPARATOR '§') AS documents 
-			FROM movements 
+				GROUP_CONCAT(DISTINCT CONCAT(documents.id,'§',documents.description)
+					ORDER BY documents.description SEPARATOR '§') AS documents
+			FROM movements
 			LEFT JOIN movements_items
-				ON movements.id=movements_items.id_movements 
+				ON movements.id=movements_items.id_movements
 			LEFT JOIN items ON movements_items.id_items=items.id
 			LEFT JOIN parts ON items.id_parts=parts.id
-			JOIN 
+			JOIN
 			(
 				SELECT movements_items.id_movements,items.id_parts,IFNULL(items.sn,'') AS sn,count(IFNULL(items.sn,'')) AS qty
 				FROM movements_items JOIN items ON movements_items.id_items=items.id
 				JOIN parts ON items.id_parts=parts.id
 				GROUP BY movements_items.id_movements,parts.id,IFNULL(items.sn,'')
-				ORDER BY parts.pn 
+				ORDER BY parts.pn
 			) qt ON movements.id=qt.id_movements AND items.id_parts=qt.id_parts AND IFNULL(items.sn,'')=qt.sn
 			LEFT JOIN places_all AS places_from
 				ON movements.id_places_from=places_from.id
@@ -214,7 +214,7 @@ elseif($op=='add')
 		$sql="SELECT CONCAT(ig.id_places,'_',IFNULL(pa.id_places_types,'0')) AS id_places,
 				ig.id_parts,p.description,p.pn
 			FROM items_grouped ig JOIN parts p ON ig.id_parts=p.id
-				JOIN places_all pa ON ig.id_places=pa.id 
+				JOIN places_all pa ON ig.id_places=pa.id
 			WHERE ig.id='$id_items'";
 		$result=$conn->do_query($sql);
 		$rows=$conn->result_to_array($result,true);
@@ -253,7 +253,7 @@ elseif($op=='newPart')
 		if($row["id_places_types"]>2)
 			$manufacturers[$id]=$row["name"];
 	}
-	
+
 	$sql="SELECT id,`long` FROM measure_unit ORDER BY `long`";
 	$result=$conn->do_query($sql);
 	$rows=$conn->result_to_array($result,true);
@@ -277,7 +277,7 @@ elseif($op=='fillSnFromPn')
 	$id_parts=$_POST["id_parts"];
 	$id_places_from=$_POST["id_places_from"];
 	$id_places_to=$_POST["id_places_to"];
-		
+
 	$conn=new mysqlConnection;
 
 	$sql="SELECT items_grouped.id,
@@ -290,7 +290,7 @@ elseif($op=='fillSnFromPn')
 				items_grouped.licence_number,
 				items_grouped.licence_prog,
 				IFNULL(licence_types.description,'')  AS licence_type
-			FROM items_grouped 
+			FROM items_grouped
 				LEFT JOIN owners ON items_grouped.id_owners=owners.id
 				LEFT JOIN licence_types ON items_grouped.licence_type=licence_types.id
 			WHERE items_grouped.id_parts='$id_parts'
@@ -329,13 +329,13 @@ elseif($op=='do_edit')
 	$id_documents=(isset($_POST["id_documents"])?implode(",",$_POST["id_documents"]):"''");
 
 	$sql="DELETE FROM movements_documents
-		WHERE id_movements='$id_movements' 
+		WHERE id_movements='$id_movements'
 			AND id_documents NOT IN ($id_documents)";
 	$conn->do_query($sql);
 
-	$sql="DELETE d FROM documents d 
-			LEFT JOIN movements_documents 
-			ON d.id=movements_documents.id_documents 
+	$sql="DELETE d FROM documents d
+			LEFT JOIN movements_documents
+			ON d.id=movements_documents.id_documents
 			WHERE movements_documents.id_documents IS NULL";
 
 	$conn->do_query($sql);
@@ -433,6 +433,7 @@ elseif($op=='do_add')
 	$date=$post["date"];
 	$note=$post["note"];
 
+	$affected_items=array();
 
 
 	$movements=array();
@@ -446,7 +447,7 @@ elseif($op=='do_add')
 		if(substr($k,0,4)=="chk_")
 		{
 			list($foo,$id_parts,$id_items)=explode("_",$k);
-			
+
 			$qty=$post[sprintf("qty_%d_%d",$id_parts,$id_items)];
 			$loc=$post[sprintf("loc_%d_%d",$id_parts,$id_items)];
 			$pos=$post[sprintf("pos_%d_%d",$id_parts,$id_items)];
@@ -570,7 +571,7 @@ elseif($op=='do_add')
 			}
 			else
 				$sn="null";
-	
+
 			$lty=(int)$nii["lty"];
 			$licence_type=($lty>0?$lty:"null");
 			$own=(int)$nii["own"];
@@ -608,9 +609,10 @@ elseif($op=='do_add')
 
 				$conn->do_query($query);
 				$id_items=$conn->insert_id();
-				
+				$affected_items[]=$id_items;
+
 				$query="INSERT INTO movements_items(id_movements,id_items,new_from_supplier,location,position,id_bsd)
-							VALUES ('$id_movements', '$id_items',1,'$loc','$pos',$bsd)"; 
+							VALUES ('$id_movements', '$id_items',1,'$loc','$pos',$bsd)";
 				$conn->do_query($query);
 
 			}
@@ -625,28 +627,30 @@ elseif($op=='do_add')
 			$loc=str_replace("'","\'",$movement["loc"]);
 			$pos=str_replace("'","\'",$movement["pos"]);
 
+			$affected_items[]=$items;
 			$query="INSERT INTO movements_items(id_movements,id_items,location,position,id_bsd)
 				SELECT '$id_movements', items.id,'$loc','$pos',$bsd FROM
 				items
-					INNER JOIN 
+					INNER JOIN
 					(
 						SELECT i2.id
 						FROM `items_grouped` AS i1
 							INNER JOIN `items_grouped` AS i2
 							ON i1.id='$id_items' AND IFNULL(i1.sn,'')=IFNULL(i2.sn,'') AND i1.location=i2.location AND i1.position=i2.position
-								AND i1.id_parts=i2.id_parts AND IFNULL(i1.id_owners,'')=IFNULL(i2.id_owners,'') 
+								AND i1.id_parts=i2.id_parts AND IFNULL(i1.id_owners,'')=IFNULL(i2.id_owners,'')
 						WHERE i1.id_parts='$id_parts'
 						AND i1.id_places='$id_places_from'
 						ORDER BY i2.id
 						LIMIT $qty
-					) AS items2 
+					) AS items2
 					ON items.id=items2.id";
 
 			$conn->do_query($query);
 			if($conn->affected_rows()!=$qty)
 				die($query);
 		}
-
+// fix parent and sons
+		fixParentAndSons($conn,$affected_items);
 // handle uploads
 		handleUploads($conn,$id_movements,$uploads);
 
@@ -664,7 +668,7 @@ elseif($op=='details')
 	require_once("mysql.php");
 	$conn=new mysqlConnection;
 
-	$sql="SELECT movements.id,movements.date,movements.note, 
+	$sql="SELECT movements.id,movements.date,movements.note,
 					places_from.name AS place_from,
 					places_to.name AS place_to
 			FROM movements
@@ -711,7 +715,7 @@ elseif(($op=="showDoc") && (isset($_GET["id_documents"])))
 		header("Content-Disposition: attachment; filename=\"$name\"");
 		echo $content;
 	}
-	
+
 	$conn=null;
 }
 
@@ -720,7 +724,7 @@ function buildBsdCombo($id_parts,$id_places_to)
 	require_once("mysql.php");
 	$id_places_to_exploded=explode("_",$id_places_to);
 	$do_bsd=((count($id_places_to_exploded)>1)&&($id_places_to_exploded[1]=="0"));
-	
+
 	$s="";
 	if($do_bsd)
 	{
@@ -729,7 +733,7 @@ function buildBsdCombo($id_parts,$id_places_to)
 
 		$sql="SELECT bsd.id,bsd.description
 			FROM places_all JOIN uav
-				ON places_all.id_uav=uav.id AND places_all.id='$id_places_to' 
+				ON places_all.id_uav=uav.id AND places_all.id='$id_places_to'
 			JOIN bsd ON uav.uav_type_id=bsd.uav_type_id
 			JOIN bsd_compatible ON bsd.id_bsd_compatible=bsd_compatible.id
 			WHERE bsd_compatible.id_parts='$id_parts'
@@ -746,26 +750,26 @@ function buildBsdCombo($id_parts,$id_places_to)
 						(
 							SELECT IFNULL(movements_items.id_bsd,0) AS bsd,
 									movements.id_places_to AS id_places_to,
-									movements_items.id_items 		
+									movements_items.id_items
 								FROM items
-									JOIN movements_items 
+									JOIN movements_items
 										ON items.id = movements_items.id_items
-											AND items.id_parts='$id_parts' 
-									LEFT JOIN bsd_compatible 
+											AND items.id_parts='$id_parts'
+									LEFT JOIN bsd_compatible
 										ON items.id_parts = bsd_compatible.id_parts
-									LEFT JOIN movements 
+									LEFT JOIN movements
 										ON movements.id = movements_items.id_movements
 									LEFT JOIN places_all
 										ON movements.id_places_to=places_all.id
 									LEFT JOIN uav
 										ON places_all.id_uav=uav.id
-									LEFT JOIN bsd 
+									LEFT JOIN bsd
 										ON bsd_compatible.id = bsd.id_bsd_compatible
 										AND bsd.uav_type_id=uav.uav_type_id
-								ORDER BY movements.date DESC 
+								ORDER BY movements.date DESC
 						) t
 						GROUP BY t.id_items
-						HAVING t.bsd>0 AND t.id_places_to='$id_places_to'";			
+						HAVING t.bsd>0 AND t.id_places_to='$id_places_to'";
 			$result=$conn->do_query($sql);
 			$t=$conn->result_to_array($result,true);
 			foreach($t as $u)
@@ -783,14 +787,14 @@ function getMovementsDetails($id_movements)
 {
 	require_once("mysql.php");
 	$conn=new mysqlConnection;
-	$sql="SELECT parts.pn, items.licence_number, 
+	$sql="SELECT parts.pn, items.licence_number,
 				items.licence_name,items.licence_number,items.licence_prog,
 					IFNULL(licence_types.description,'') AS licence_type,parts.description,
 				IFNULL(items.sn,'') AS sn, IFNULL(bsd.description,'') AS bsd,
 					movements_items.location,movements_items.position,
 					IFNULL(owners.description,'') AS owner,
 				count(items.id) AS qty
-			FROM movements 
+			FROM movements
 				LEFT JOIN movements_items ON movements.id=movements_items.id_movements
 				LEFT JOIN items ON items.id = movements_items.id_items
 				LEFT JOIN owners ON items.id_owners = owners.id
@@ -823,7 +827,7 @@ function handleUploads($conn,$id_movements,$uploads)
 		$size=$v["size"];
 		$type=$v["type"];
 
-		$query="SELECT id FROM documents 
+		$query="SELECT id FROM documents
 				WHERE checksum='$checksum'";
 		$result=$conn->do_query($query);
 		$rows=$conn->result_to_array($result,false);
@@ -834,18 +838,18 @@ function handleUploads($conn,$id_movements,$uploads)
 			$query = "INSERT INTO documents
 					(
 						description,
-						filename, 
-						size, 
-						type, 
+						filename,
+						size,
+						type,
 						content,
 						checksum
 					)
-					VALUES 
+					VALUES
 					(
 						'$desc',
-						'$filename', 
-						'$size', 
-						'$type', 
+						'$filename',
+						'$size',
+						'$type',
 						'$content',
 						'$checksum'
 					)";
@@ -875,17 +879,42 @@ function getMovementsDocuments($id_movements)
 {
 	require_once("mysql.php");
 	$conn=new mysqlConnection;
-	$sql="SELECT documents.id AS id_documents, documents.filename, 
+	$sql="SELECT documents.id AS id_documents, documents.filename,
 					documents.description
-			FROM movements_documents 
-				LEFT JOIN documents 
+			FROM movements_documents
+				LEFT JOIN documents
 					ON movements_documents.id_documents=documents.id
 			WHERE movements_documents.id_movements='$id_movements'
 			ORDER BY description,filename";
 	$result=$conn->do_query($sql);
 	$documents=$conn->result_to_array($result,false);
 	$conn=null;
-	return $documents;	
+	return $documents;
+}
+
+
+function fixParentAndSons($conn,$items)
+{
+/*	if($items==="*")
+		$where="WHERE 1=1";
+	else
+	{
+		if(is_array($items)&&count($items))
+			$where="WHERE items_grouped.id IN(".implode(",",$items).")";
+		else
+			$where="WHERE items_grouped.id=0";
+	}
+	$q="SELECT items_grouped.id,items_grouped.id_places,
+				items_parent.id_places AS id_places_parent,
+				items_sons.id_places AS id_places_sons
+			FROM
+				items_grouped LEFT JOIN items_grouped items_parent
+					ON items_grouped.parent_id=items_parent.id
+				LEFT JOIN items_grouped items_sons
+					ON items_grouped.id=items_sons.parent_id
+				WHERE (items_parent.id_places is not null and items_parent.id_places!=items_grouped.id_places)
+					OR (items_sons.id_places is not null and items_sons.id_places!=items_grouped.id_places)"
+*/
 }
 
 ?>

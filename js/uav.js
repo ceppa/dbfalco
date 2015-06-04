@@ -25,87 +25,98 @@ function listUavButton_Click(search)
 			params: [{name:'op',value:'list'}],
 			dataType: 'json',
 			showToggleBtn: false,
-			colModel : 
+			colModel :
 			[
 				{
-					display: 'Tipo', 
-					name : 'uav_type.description', 
-					width : 200, 
-					sortable : true, 
+					display: 'Tipo',
+					name : 'uav_type.description',
+					width : 200,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Flotta', 
-					name : 'fleet.description', 
-					width : 150, 
-					sortable : true, 
+					display: 'Flotta',
+					name : 'fleet.description',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Marche', 
-					name : 'uav.marche', 
-					width : 150, 
-					sortable : true, 
+					display: 'Marche',
+					name : 'uav.marche',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Part Number', 
-					name : 'uav.pn', 
-					width : 150, 
-					sortable : true, 
+					display: 'Part Number',
+					name : 'uav.pn',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Serial Nuber', 
-					name : 'uav.sn', 
-					width : 150, 
-					sortable : true, 
+					display: 'Serial Nuber',
+					name : 'uav.sn',
+					width : 150,
+					sortable : true,
+					align: 'left'
+				},
+				{
+					display: 'Note',
+					name : 'uav.noe',
+					width : 150,
+					sortable : true,
 					align: 'left'
 				}
 			],
-			buttons : 
+			buttons :
 			[
 				{
-					name: 'Add', 
-					bclass: 'add', 
+					name: 'Add',
+					bclass: 'add',
 					onpress : uavAdd
 				},
 				{
-					name: 'Edit', 
-					bclass: 'edit', 
+					name: 'Edit',
+					bclass: 'edit',
 					onpress : uavEdit
 				},
 				{
-					name: 'Delete', 
-					bclass: 'delete', 
+					name: 'Delete',
+					bclass: 'delete',
 					onpress : uavDelete
 				},
 				{
 					separator: true
-				}			
+				}
 			],
-			searchitems : 
+			searchitems :
 			[
 				{
-					display: 'Marche', 
+					display: 'Marche',
 					name : 'uav.marche'
 				},
 				{
-					display: 'Flotta', 
+					display: 'Flotta',
 					name : 'fleet.description',
 					isdefault: true
 				},
 				{
-					display: 'Part Number', 
+					display: 'Part Number',
 					name : 'uav.pn'
 				},
 				{
-					display: 'Serial Number', 
+					display: 'Serial Number',
 					name : 'uav.sn'
+				},
+				{
+					display: 'Note',
+					name : 'uav.note'
 				}
 			],
 			onSuccess: function()
-			{	
+			{
 //				$(".bDiv").height("auto");
 			},
 			onReply: flexiReply,
@@ -162,8 +173,8 @@ function uavDelete()
 function uavAdd()
 {
 	showWait();
-	$.post('include/uav.php', { op: "add"}, 
-		function(data) 
+	$.post('include/uav.php', { op: "add"},
+		function(data)
 		{
 			$('#div_main').html(data);
 			$('#submit').bind('click', uav_form_submit);
@@ -176,8 +187,8 @@ function uavAdd()
 function uavEdit()
 {
 	showWait();
-	$.post('include/uav.php', { op: "edit", id:  flexiItemId}, 
-		function(data) 
+	$.post('include/uav.php', { op: "edit", id:  flexiItemId},
+		function(data)
 		{
 			$('#div_main').html(data);
 			$('#submit').bind('click', uav_form_submit);
@@ -194,7 +205,7 @@ function uav_form_submit()
 	var ok=form_validate(notnull,magzero);
 	if(ok)
 	{
-		
+
 		form_post("uav");
 		$(".flexme").flexReload();
 		resetButtons();
@@ -207,4 +218,3 @@ function uav_form_cancel()
 {
 	showDiv("div_flexi");
 }
-

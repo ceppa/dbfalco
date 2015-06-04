@@ -11,8 +11,8 @@ function()
             // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
             // home, end, period, and numpad decimal
             return (
-				(e.keyCode == 65 && e.ctrlKey === true) || 
-                key == 8 || 
+				(e.keyCode == 65 && e.ctrlKey === true) ||
+                key == 8 ||
                 key == 9 ||
                 key == 13 ||
                 key == 46 ||
@@ -60,16 +60,16 @@ function runModule(menuToActivate,menuModuleName)
 	$("#"+menuToActivate).addClass("active");
 //	var func=menuModuleName+"_click()";
 	var func=menuModuleName+"_click";
-	try 
+	try
 	{
 		// find object
 		var fn = window[func];
- 
+
 		// is object a function?
 		if (typeof fn === "function") fn();
 //		eval(func);
 	}
-	catch(e) 
+	catch(e)
 	{
 		alert(func+" "+e.message);
 		$('#div_main').html("");
@@ -128,13 +128,13 @@ function initAjax()
 		function(event, request, settings)
 		{
 			//Debug, must remove for release
-/*			alert(	
-				"QUESTO E' UN ERRORE AJAX\n\n" 
-				+ settings.url 
-				+ "\n\n" 
+			alert(
+				"QUESTO E' UN ERRORE AJAX\n\n"
+				+ settings.url
+				+ "\n\n"
 				+ request.responseText
 				+ event.message
-			);*/ 
+			); 
 		}
 	);
 }
@@ -157,11 +157,11 @@ function display_admin_nav()	//async
 {
 	$.ajax({
 			type:'POST',
-			url:'include/main.php', 
+			url:'include/main.php',
 			data:{ op: "display_admin_nav" },
 			cache: false,
 			async: false
-		}).done(function(data) 
+		}).done(function(data)
 			{
 				$('#admin_nav').html(data);
 				$("ul.jd_menu").jdMenu({showDelay:0,hideDelay:0});
@@ -202,7 +202,7 @@ function getData(data)
 	return(data?data:"");
 }
 
-function isEmail(email) 
+function isEmail(email)
 {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	return regex.test(email);
@@ -231,13 +231,13 @@ function showModal()
 		'<div id="dialog">'+
 		'</div>'+
 		'</div>';
-	
+
 	$("body").append(modal);
 
 	var maskHeight = $(document).height();
     var maskWidth = $(window).width();
-    $('#mask').css({'width':maskWidth,'height':maskHeight});    
-	$('#mask').fadeTo("fast",0.8);    
+    $('#mask').css({'width':maskWidth,'height':maskHeight});
+	$('#mask').fadeTo("fast",0.8);
     $('#dialog').show();
 }
 
@@ -264,7 +264,7 @@ function getSessionValue(variable)
 			data: params,
 			type: "post",
 			async: false,
-			success: function(data) 
+			success: function(data)
 			{
 				out=data;
 			}
