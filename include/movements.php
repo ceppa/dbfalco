@@ -43,7 +43,6 @@ if($op=='list')
 	}
 
 	$conn=new mysqlConnection;
-
 	$sql="SELECT movements.id,
 				movements.date,
 				movements.note,
@@ -627,7 +626,7 @@ elseif($op=='do_add')
 			$loc=str_replace("'","\'",$movement["loc"]);
 			$pos=str_replace("'","\'",$movement["pos"]);
 
-			$affected_items[]=$items;
+			$affected_items[]=$id_items;
 			$query="INSERT INTO movements_items(id_movements,id_items,location,position,id_bsd)
 				SELECT '$id_movements', items.id,'$loc','$pos',$bsd FROM
 				items
@@ -650,6 +649,7 @@ elseif($op=='do_add')
 				die($query);
 		}
 // fix parent and sons
+		require_once("bsd.php");
 		fixParentAndSons($conn,$affected_items);
 // handle uploads
 		handleUploads($conn,$id_movements,$uploads);
@@ -738,6 +738,7 @@ function buildBsdCombo($id_parts,$id_places_to)
 			JOIN bsd_compatible ON bsd.id_bsd_compatible=bsd_compatible.id
 			WHERE bsd_compatible.id_parts='$id_parts'
 			GROUP BY bsd.id";
+			file_put_contents("gino.txt",$sql);
 		$result=$conn->do_query($sql);
 		$s=$conn->result_to_array($result,true);
 		foreach($s as $k=>$v)
@@ -893,28 +894,5 @@ function getMovementsDocuments($id_movements)
 }
 
 
-function fixParentAndSons($conn,$items)
-{
-/*	if($items==="*")
-		$where="WHERE 1=1";
-	else
-	{
-		if(is_array($items)&&count($items))
-			$where="WHERE items_grouped.id IN(".implode(",",$items).")";
-		else
-			$where="WHERE items_grouped.id=0";
-	}
-	$q="SELECT items_grouped.id,items_grouped.id_places,
-				items_parent.id_places AS id_places_parent,
-				items_sons.id_places AS id_places_sons
-			FROM
-				items_grouped LEFT JOIN items_grouped items_parent
-					ON items_grouped.parent_id=items_parent.id
-				LEFT JOIN items_grouped items_sons
-					ON items_grouped.id=items_sons.parent_id
-				WHERE (items_parent.id_places is not null and items_parent.id_places!=items_grouped.id_places)
-					OR (items_sons.id_places is not null and items_sons.id_places!=items_grouped.id_places)"
-*/
-}
 
 ?>

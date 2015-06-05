@@ -28,7 +28,7 @@ if($op=='list')
 	$query = $_REQUEST['query'];
 	$qtype = $_REQUEST['qtype'];
 
-	if($qtype) 
+	if($qtype)
 		$where.=" AND $qtype LIKE '%$query%'";
 
 	if(!$page || !$rp)
@@ -44,11 +44,11 @@ if($op=='list')
 
 	$conn=new mysqlConnection;
 
-	$sql="SELECT items_grouped.id, 
-					parts.pn, 
+	$sql="SELECT items_grouped.id,
+					parts.pn,
 					parts.description AS description,
-					items_grouped.sn, 
-					items_grouped.licence_number, 
+					items_grouped.sn,
+					items_grouped.licence_number,
 					items_grouped.licence_name,
 					manufacturers.name AS manufacturer,
 					suppliers.name AS supplier,
@@ -59,20 +59,20 @@ if($op=='list')
 					bsd.description as bsd,
 					owners.description AS owner,
 					IFNULL(fleet.description,'ALL FLEETS') AS fleet,
-					licence_types.description AS licence_type 
+					licence_types.description AS licence_type
 				FROM items_grouped LEFT JOIN parts
 					ON items_grouped.id_parts=parts.id
-				LEFT JOIN owners 
+				LEFT JOIN owners
 					ON items_grouped.id_owners=owners.id
-				LEFT JOIN licence_types 
+				LEFT JOIN licence_types
 					ON items_grouped.licence_type=licence_types.id
-				LEFT JOIN places AS manufacturers 
+				LEFT JOIN places AS manufacturers
 					ON parts.id_manufacturers=manufacturers.id
-				LEFT JOIN places AS suppliers 
+				LEFT JOIN places AS suppliers
 					ON parts.id_suppliers=suppliers.id
-				LEFT JOIN places_all AS places 
+				LEFT JOIN places_all AS places
 					ON items_grouped.id_places=places.id
-				LEFT JOIN fleet 
+				LEFT JOIN fleet
 					ON places.id_fleet=fleet.id
 				LEFT JOIN bsd
 					ON items_grouped.id_bsd=bsd.id
@@ -148,7 +148,7 @@ elseif($op=='edit')
 
 	require_once("mysql.php");
 	$conn=new mysqlConnection;
-	$result=$conn->do_query("SELECT ifnull(places_all.id_places_types,'0') AS id_places_types FROM 
+	$result=$conn->do_query("SELECT ifnull(places_all.id_places_types,'0') AS id_places_types FROM
 		items_grouped JOIN places_all ON items_grouped.id_places=places_all.id
 		WHERE items_grouped.id='$id_value'");
 	$rows=$conn->result_to_array($result,false);
@@ -158,7 +158,7 @@ elseif($op=='edit')
 		unset($fields["id_bsd"]);
 
 
-	$result=$conn->do_query("SELECT parts.id,parts.pn,parts.description FROM 
+	$result=$conn->do_query("SELECT parts.id,parts.pn,parts.description FROM
 		items LEFT JOIN parts ON items.id_parts=parts.id
 		WHERE items.id='$id_value'");
 	$header=array();
@@ -176,7 +176,7 @@ elseif($op=='edit')
 						AND ig1.licence_number=ig2.licence_number
 						AND ig1.licence_prog=ig2.licence_prog
 						AND IFNULL(ig1.licence_type,'')=IFNULL(ig2.licence_type,'')
-						AND ig1.sn IS NULL 
+						AND ig1.sn IS NULL
 						AND ig2.sn IS NULL
 						AND ig1.id='$id_value'";
 
@@ -196,7 +196,7 @@ elseif($op=='edit')
 
 	require_once("bsd.php");
 	$addon=get_items_in_bsd($id_value);
-	
+
 	echo json_encode(array("form"=>$form,"header"=>$header,"addon"=>$addon,"qty"=>$qty));
 	die();
 }
@@ -205,7 +205,7 @@ elseif($op=="details")
 	$id_items=substr($_POST["id"],3);
 	require_once("mysql.php");
 	$conn=new mysqlConnection;
-	$sql="SELECT items.id,parts.pn, items.licence_number, 
+	$sql="SELECT items.id,parts.pn, items.licence_number,
 				items.licence_name, parts.description,
 				IFNULL(items.sn,'') AS sn, IFNULL(bsd.description,'') AS bsd, places_all.name AS place,
 				licence_types.description AS licence_type,owners.description AS owner
@@ -220,7 +220,7 @@ elseif($op=="details")
 	$result=$conn->do_query($sql);
 	$items=$conn->result_to_array($result,true);
 
-	$sql="SELECT movements.date,movements.note, 
+	$sql="SELECT movements.date,movements.note,
 					places_from.name AS place_from,
 					places_to.name AS place_to,
 					movements_items.location,
@@ -258,11 +258,12 @@ elseif($op=="form_posted")
 
 	$conn=new mysqlConnection;
 	$query=buildPostQuery(true);
+	$items=array();
 	if($qty>1)
 	{
 /*		$qh=sprintf("UPDATE
 						items
-					INNER JOIN 
+					INNER JOIN
 					(
 						SELECT i2.id
 						FROM `items_grouped` AS i1
@@ -271,7 +272,7 @@ elseif($op=="form_posted")
 								AND i1.id_parts=i2.id_parts AND IFNULL(i1.id_owners,'')=IFNULL(i2.id_owners,'')  AND i1.id_places=i2.id_places
 						ORDER BY i2.id
 						LIMIT %d
-					) AS items2 
+					) AS items2
 					ON items.id=items2.id",$id_value,$qty);
 		$query=str_replace("UPDATE items",$qh,$query);*/
 		$q=sprintf("SELECT i2.id
@@ -296,12 +297,16 @@ elseif($op=="form_posted")
 			echo json_encode($out);
 			die();
 		}
-		$items="(".implode(",",array_keys($items)).")";
-		
-		$query.=" OR `items`.id IN $items";
+		$items=array_keys($items);
+		$items_list="(".implode(",",array_keys($items)).")";
+
+		$query.=" OR `items`.id IN $items_list";
 	}
 
 	$conn->do_query($query);
+	$items[]=$id_value;
+	require_once("bsd.php");
+	fixParentAndSons($conn,$items);
 	$conn=null;
 
 	$message="modifica effettuata";
@@ -315,6 +320,3 @@ elseif($op=="form_posted")
 	echo json_encode($out);
 }
 ?>
-
-
-

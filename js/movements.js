@@ -25,127 +25,127 @@ function listMovementsButton_Click(search)
 			params: [{name:'op',value:'list'}],
 			dataType: 'json',
 			showToggleBtn: false,
-			colModel : 
+			colModel :
 			[
 				{
-					display: 'Date', 
-					name : 'movements.date', 
-					width : 100, 
-					sortable : true, 
+					display: 'Date',
+					name : 'movements.date',
+					width : 100,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'From', 
-					name : 'places_from.name', 
-					width : 100, 
-					sortable : true, 
+					display: 'From',
+					name : 'places_from.name',
+					width : 100,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'To', 
-					name : 'places_to.name', 
-					width : 100, 
-					sortable : true, 
+					display: 'To',
+					name : 'places_to.name',
+					width : 100,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'PN', 
-					name : 'pn', 
-					width : 100, 
-					sortable : true, 
+					display: 'PN',
+					name : 'pn',
+					width : 100,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Description', 
-					name : 'parts.description', 
-					width : 200, 
-					sortable : true, 
+					display: 'Description',
+					name : 'parts.description',
+					width : 200,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'SN', 
-					name : 'sn', 
-					width : 100, 
-					sortable : true, 
+					display: 'SN',
+					name : 'sn',
+					width : 100,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Qty', 
-					name : 'qty', 
-					width : 30, 
-					sortable : true, 
+					display: 'Qty',
+					name : 'qty',
+					width : 30,
+					sortable : true,
 					align: 'left'
 				},
 				{
-					display: 'Note', 
-					name : 'movements.note', 
-					width : 150, 
-					sortable : true, 
+					display: 'Note',
+					name : 'movements.note',
+					width : 150,
+					sortable : true,
 					align: 'center'
 				},
 				{
-					display: 'Documents', 
-					name : 'documents.description', 
-					width : 100, 
-					sortable : true, 
+					display: 'Documents',
+					name : 'documents.description',
+					width : 100,
+					sortable : true,
 					align: 'left'
 				}
 			],
-			buttons : 
+			buttons :
 			[
 				{
-					name: 'Add', 
-					bclass: 'add', 
+					name: 'Add',
+					bclass: 'add',
 					onpress : movementsAdd
 				},
 				{
-					name: 'Edit', 
-					bclass: 'edit', 
+					name: 'Edit',
+					bclass: 'edit',
 					onpress : movementsEdit
 				},
 				{
-					name: 'Details', 
-					bclass: 'details', 
+					name: 'Details',
+					bclass: 'details',
 					onpress : movementsDetails
 				},
 				{
 					separator: true
-				}			
+				}
 			],
-			searchitems : 
+			searchitems :
 			[
 				{
-					display: 'Date', 
+					display: 'Date',
 					name : 'movements.date',
 					isdefault: true
 				},
 				{
-					display: 'From', 
+					display: 'From',
 					name : 'places_from.name'
 				},
 				{
-					display: 'To', 
+					display: 'To',
 					name : 'places_to.name'
 				},
 				{
-					display: 'PN', 
+					display: 'PN',
 					name : 'pn'
 				},
 				{
-					display: 'SN', 
+					display: 'SN',
 					name : 'items.sn'
 				},
 				{
-					display: 'Description', 
+					display: 'Description',
 					name : 'parts.description'
 				},
 				{
-					display: 'Note', 
+					display: 'Note',
 					name : 'movements.note'
 				}
 			],
 			onSuccess: function()
-			{	
+			{
 //				$(".bDiv").height("auto");
 			},
 			onReply: flexiReply,
@@ -199,8 +199,8 @@ function menu_movements_new_click()
 function movementsDetails()
 {
 	showWait();
-	$.post('include/movements.php', { op: "details", id:  flexiItemId}, 
-		function(data) 
+	$.post('include/movements.php', { op: "details", id:  flexiItemId},
+		function(data)
 		{
 			var id=flexiItemId.substr(3);
 			data=getData(data);
@@ -255,7 +255,7 @@ function buildMovementDetailTable(details)
 		$('<td>').text("bsd")
 		).addClass('header')
 	).attr('id','detail_table');
-	$.each(details, function(i, detail) 
+	$.each(details, function(i, detail)
 	{
 		$('<tr>').append(
 			$('<td>').text(detail.pn),
@@ -271,7 +271,7 @@ function buildMovementDetailTable(details)
 			$('<td>').text(detail.position),
 			$('<td>').text(detail.bsd)
 		).appendTo(table);
-	
+
 	});
 	return table;
 }
@@ -285,8 +285,8 @@ function movementsAdd(flexiItemId)
 	var id_items=(typeof(flexiItemId)!="undefined"?flexiItemId.substr(3):0);
 	showWait();
 
-	$.post('include/movements.php', { op: "add", id_items: id_items}, 
-		function(data) 
+	$.post('include/movements.php', { op: "add", id_items: id_items},
+		function(data)
 		{
 			data=getData(data);
 			var addon=data.addon;
@@ -314,12 +314,12 @@ function movementsAdd(flexiItemId)
 				$("#movement_details").hide();
 				$("#movement_documents").hide();
 			}
-			
+
 
 
 			$('#editform').ajaxForm(
 			{
-				beforeSubmit:	
+				beforeSubmit:
 				function(formData, jqForm, options)
 				{
 					return movements_form_submit();
@@ -497,16 +497,16 @@ function updateBsd(value)
 					data: { op: "build_bsd_combos", id_places_to: id_places,id_parts_list:id_parts_list},
 					type: "post",
 					async: false,
-					success: function(data) 
+					success: function(data)
 					{
 						var bsd_list=getData(data);
 						$.each(bsd_list,function(id_parts,bsdCombo)
 						{
 							initializeBsdCombos(id_parts,bsdCombo);
-						});	
+						});
 					}
 				});
-									
+
 		}
 	}
 	else
@@ -576,13 +576,13 @@ function setPnAutocomplete(i)
 {
 	var excludeString=getExcludeString();
 	var mustMatch=($("#id_places_from").val().split("_")[1]>1?0:1);
-	$('#pn_'+i).autocomplete("include/itemsAutocompleteBackend.php", 
+	$('#pn_'+i).autocomplete("include/itemsAutocompleteBackend.php",
 		{
-			minChars:0, 
-			matchSubset:1, 
-			matchContains:1, 
-			cacheLength:10, 
-			formatItem:function(row) 
+			minChars:0,
+			matchSubset:1,
+			matchContains:1,
+			cacheLength:10,
+			formatItem:function(row)
 			{
 				var pn,ln;
 				if(Number(row[5]))
@@ -618,14 +618,14 @@ function setPnAutocomplete(i)
 function setSnAutocomplete(i)
 {
 	var excludeString=getExcludeString();
-	$('#sn_'+i).autocomplete("include/itemsAutocompleteBackend.php", 
+	$('#sn_'+i).autocomplete("include/itemsAutocompleteBackend.php",
 		{
-			minChars:0, 
-			matchSubset:1, 
-			matchContains:1, 
-			cacheLength:10, 
+			minChars:0,
+			matchSubset:1,
+			matchContains:1,
+			cacheLength:10,
 			formatItem:function(row) {
-				return "<b>" + row[0] + "</b>" 
+				return "<b>" + row[0] + "</b>"
 				+ "<br><i>" + row[1] + "</i>";
 			},
 			onItemSelect:fillPnFromSn,
@@ -638,7 +638,7 @@ function setSnAutocomplete(i)
 			rowNumber:i,
 			selectOnly:1,
 			mustMatch:1
-		}); 
+		});
 }
 
 function itemSelected(li)
@@ -703,7 +703,7 @@ function showNewPartForm(pn,n)
 		{
 			var notnull=new Array("description","pn");
 			var magzero=new Array("id_suppliers","id_measure_unit","id_category");
-		
+
 			var ok=form_validate(notnull,magzero,"newPartForm");
 			if(ok)
 			{
@@ -735,15 +735,15 @@ function showNewPartForm(pn,n)
 			$("#pn_"+n).focus();
 		});
 
-	$.post('include/movements.php', { op: "newPart"}, 
-		function(data) 
+	$.post('include/movements.php', { op: "newPart"},
+		function(data)
 		{
 			data=getData(data);
 			var categories=data.categories;
 			var suppliers=data.suppliers;
 			var manufacturers=data.manufacturers;
 			var measure_unit=data.measure_unit;
-			
+
 			$("#id_category").append('<option value="0">---</select>');
 			$("#id_suppliers").append('<option value="0">---</select>');
 			$("#id_manufacturers").append('<option value="0">---</select>');
@@ -846,8 +846,8 @@ function fillSnFromPn(n,id_parts,id_items)
 				type: 'post',
 				url: "include/movements.php",
 				data: { op:	"fillSnFromPn",
-						id_parts: id_parts, 
-						id_places_from: $('#id_places_from').val(), 
+						id_parts: id_parts,
+						id_places_from: $('#id_places_from').val(),
 						id_places_to: $('#id_places_to').val()
 					},
 				success: function(data)
@@ -1000,7 +1000,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						}
 						else
 							realniRow=realniRow.replace(/{owner}/g,owners_combo);
-						
+
 
 						$(td).html("<table></table>");
 						var table=$(td).find("table");
@@ -1054,7 +1054,7 @@ function fillSnFromPn(n,id_parts,id_items)
 							{
 								checkboxClick(this,table,n);
 							});
-						initializeBsdCombos(id_parts,bsdCombo);	
+						initializeBsdCombos(id_parts,bsdCombo);
 						updateAutocompleters();
 						$('input[name^="qty"]').ForceNumericOnly();
 						for(var i=0;i<$('input[name^="qty_"]').length;i++)
@@ -1095,7 +1095,7 @@ function initializeBsdCombos(id_parts,bsdCombo)
 					this.value=0;
 				if((this.name!=sender.name)&&(this.value==sender.value))
 					this.value=0;
-				
+
 			});
 		});
 	}
@@ -1168,13 +1168,13 @@ function checkboxClick(sender,table,n)
 			var nextChk=sender_splitted[0]+"_"+sender_splitted[1]+"_"+mm;
 			var nextInput="snni_"+sender_splitted[1]+"_"+mm;
 			var chk=$('td input[type=checkbox][name="'+nextChk+'"]',$(table));
-			
+
 			if((chk.length==0)&&(snok==true))
 			{
-				$("tr:last",$(table)).clone(true,true).find("input,select").each(function() 
+				$("tr:last",$(table)).clone(true,true).find("input,select").each(function()
 					{
-						
-						$(this).val('').attr('name', function() 
+
+						$(this).val('').attr('name', function()
 							{
 								if(this.type=="checkbox")
 									$(this).removeAttr('checked');
@@ -1182,7 +1182,7 @@ function checkboxClick(sender,table,n)
 									$(this).hide();
 								var exp=this.name.split("_");
 								exp[exp.length-1]=String(Number(exp[exp.length-1])+1);
-								return exp.join("_") 
+								return exp.join("_")
 							});
 					}
 				).end().appendTo($(table));
@@ -1226,8 +1226,8 @@ function deleteRows(n)
 function movementsEdit()
 {
 	showWait();
-	$.post('include/movements.php', { op: "edit", id:  flexiItemId}, 
-		function(data) 
+	$.post('include/movements.php', { op: "edit", id:  flexiItemId},
+		function(data)
 		{
 			data=getData(data);
 			var details=data.details;
@@ -1252,7 +1252,7 @@ function movementsEdit()
 					).addClass('header')
 				).addClass('form boxed').appendTo($("#editform")).attr('id','documents_table');
 
-			$.each(documents, function(i, document) 
+			$.each(documents, function(i, document)
 			{
 				$('<tr>').append(
 					$('<td>').append(
@@ -1267,7 +1267,7 @@ function movementsEdit()
 
 			$('#editform').ajaxForm(
 			{
-				beforeSubmit:	
+				beforeSubmit:
 				function(formData, jqForm, options)
 				{
 					return movements_edit_submit();
@@ -1343,7 +1343,7 @@ function validate_movements_sn()
 					data: postdata,
 					type: "post",
 					async: false,
-					success: function(data) 
+					success: function(data)
 					{
 						if(data.length)
 						{
@@ -1369,7 +1369,7 @@ function movements_form_cancel()
 	{
 		$("#jd_menu li").removeClass("active");
 		$("#jd_items").addClass("active");
-	}	
+	}
 }
 
 function updateAutocompleters()
@@ -1402,7 +1402,7 @@ function updateAutocompleters()
 			if($(this)[0].autocompleter!=undefined)
 			{
 				$(this)[0].autocompleter.flushCache();
-				$(this)[0].autocompleter.setExtraParams({exclude:excludeString});			
+				$(this)[0].autocompleter.setExtraParams({exclude:excludeString});
 			}
 		});
 }
@@ -1459,4 +1459,3 @@ function showDoc(id_documents)
 {
 	window.open("include/movements.php?op=showDoc&id_documents="+id_documents);
 }
-
