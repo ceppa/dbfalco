@@ -80,7 +80,6 @@ function listFleetButton_Click(search)
 			{
 //				$(".bDiv").height("auto");
 			},
-			onReply: flexiReply,
 			sortname: "fleet.description",
 			sortorder: "asc",
 			usepager: true,

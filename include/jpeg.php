@@ -1,4 +1,4 @@
-<?
+<?php
 function resize($sourcefile, $endfile, $thumbwidth, $thumbheight, $quality)
 {
 	$img = imagecreatefromjpeg($sourcefile);

@@ -1,35 +1,34 @@
-<?
+<?php
 require_once("const.php");
 require_once("util.php");
 require_once("../config.php");
+$op=filter_input(INPUT_POST, 'op'); 
 
-$op=$_REQUEST["op"];
-
-
-if($op=='list')
+if($op==='list')
 {
 	$id_fleet=$_SESSION["id_fleet"];
 	$where = "WHERE (places_from.id_fleet IN($id_fleet) OR places_to.id_fleet IN ($id_fleet))";
 	if($_SESSION["livello"]==3)
-		$where="WHERE 1";
+            $where="WHERE 1";
 
 	require_once("mysql.php");
-	$page = $_POST['page'];
-	$rp = $_POST['rp'];
-	$sortname = $_POST['sortname'];
-	$sortorder = $_POST['sortorder'];
+ 
+	$page = filter_input(INPUT_POST, 'page');
+	$rp = filter_input(INPUT_POST, 'rp');
+	$sortname = filter_input(INPUT_POST,'sortname');
+	$sortorder = filter_input(INPUT_POST,'sortorder');
 
 	if(!$sortname)
-		$sortname="operator";
+            $sortname="operator";
 	if(!$sortorder)
-		$sortorder="asc";
+            $sortorder="asc";
 
 	$sort = "ORDER BY $sortname $sortorder";
-	$query = $_REQUEST['query'];
-	$qtype = $_REQUEST['qtype'];
+	$query = filter_input(INPUT_POST,'query');
+	$qtype = filter_input(INPUT_POST,'qtype');
 
 	if($qtype)
-		$where.=" AND $qtype LIKE '%$query%'";
+            $where.=" AND $qtype LIKE '%$query%'";
 
 	if(!$page || !$rp)
 	{
@@ -164,7 +163,7 @@ elseif($op=='edit')
 		"note"=>array("value"=>"","label"=>"Note")
 		);
 
-	$id_value=substr($_POST["id"],3);
+	$id_value= substr(filter_input(INPUT_POST, "id"),3);
 	$id_field="id";
 
 	ob_start();
@@ -205,7 +204,7 @@ elseif($op=='add')
 
 
 	$addon=array();
-	$id_items=(isset($_POST["id_items"])?$_POST["id_items"]:0);
+	$id_items=(filter_input(INPUT_POST,"id_items")?filter_input(INPUT_POST,"id_items"):0);
 	if($id_items>0)
 	{
 		require_once("mysql.php");
@@ -273,9 +272,9 @@ elseif($op=='newPart')
 elseif($op=='fillSnFromPn')
 {
 	require_once("mysql.php");
-	$id_parts=$_POST["id_parts"];
-	$id_places_from=$_POST["id_places_from"];
-	$id_places_to=$_POST["id_places_to"];
+	$id_parts=  filter_input(INPUT_POST,"id_parts");
+	$id_places_from=filter_input(INPUT_POST,"id_places_from");
+	$id_places_to=filter_input(INPUT_POST,"id_places_to");
 
 	$conn=new mysqlConnection;
 
@@ -308,24 +307,25 @@ elseif($op=='fillSnFromPn')
 	$result=$conn->do_query($sql);
 	$licence_types=$conn->result_to_array($result,false);
 
-
 	$conn=null;
 
+	$itemsSons=getItemsSons($rows);
+
 	$s=buildBsdCombo($id_parts,$id_places_to);
-	echo json_encode(array("rows"=>$rows,"bsdCombo"=>$s,"owners"=>$owners,"licence_types"=>$licence_types));
+	echo json_encode(array("rows"=>$rows,"bsdCombo"=>$s,"owners"=>$owners,"licence_types"=>$licence_types,"itemsSons"=>$itemsSons));
 	die();
 }
 elseif($op=='do_edit')
 {
 	require_once("mysql.php");
-	$id_edit=explode(",",$_POST["id_edit"]);
+	$id_edit=explode(",",filter_input(INPUT_POST,"id_edit"));
 	$id_movements=$id_edit[1];
 
 	$conn=new mysqlConnection;
 	$conn->do_query("START TRANSACTION");
 
 	$uploadErrorString="";
-	$id_documents=(isset($_POST["id_documents"])?implode(",",$_POST["id_documents"]):"''");
+	$id_documents=(filter_input(INPUT_POST,"id_documents")?implode(",",filter_input(INPUT_POST,"id_documents")):"''");
 
 	$sql="DELETE FROM movements_documents
 		WHERE id_movements='$id_movements'
@@ -422,6 +422,7 @@ elseif($op=='check_sn')
 }
 elseif($op=='do_add')
 {
+	ob_start();
 	require_once("../config.php");
 //	parse_str($_POST["postdata"],$post);
 	$post=$_POST;
@@ -646,7 +647,12 @@ elseif($op=='do_add')
 
 			$conn->do_query($query);
 			if($conn->affected_rows()!=$qty)
-				die($query);
+			{
+
+				file_put_contents("movements.txt",ob_get_clean());
+				file_put_contents("movements.txt", sprintf("%s\naffected rows %d != qty %d",$query,$conn->affected_rows(),$qty), FILE_APPEND);
+				die("1");
+			}
 		}
 // fix parent and sons
 		require_once("bsd.php");
@@ -654,11 +660,22 @@ elseif($op=='do_add')
 // handle uploads
 		handleUploads($conn,$id_movements,$uploads);
 
-		$conn->do_query("COMMIT");
-		$conn=null;
-		echo "0";
+		$o=ob_get_clean();
+		$out=strlen($o);
+		if($out)
+			file_put_contents("movements.txt",$o);
+		else
+		{
+			$conn->do_query("COMMIT");
+			$conn=null;
+		}
+		echo $out;
 		die();
 	}
+	$o=ob_get_clean();
+	$out=strlen($o);
+	if($out)
+		file_put_contents("movements.txt",$o);
 	echo "1";
 	die();
 }
@@ -893,6 +910,31 @@ function getMovementsDocuments($id_movements)
 	return $documents;
 }
 
+function getItemsSons($rows)
+{
+	require_once("mysql.php");
+	$conn=new mysqlConnection;
+	$sons=array();
+	foreach($rows as $row)
+	{
+		$id_items=$row["id"];
+		$sons[$id_items]=getItemSons($conn,$id_items);
+	}
+	return $sons;
+	$conn=null;
+}
 
-
+function getItemSons($conn,$id_items)
+{
+	$sql="SELECT items_son.id, items_son.id_parts, parts.pn, parts.description,items_son.sn
+		FROM items JOIN items items_son
+			ON items.id=items_son.parent_id
+		JOIN parts ON items_son.id_parts=parts.id
+		WHERE items.id='$id_items' AND items_son.sn IS NOT NULL";
+	$result=$conn->do_query($sql);
+	$sons=$conn->result_to_array($result);
+	foreach($sons as $son=>$void)
+		$sons[$son]["son"]=getItemSons($conn,$son);
+	return $sons;
+}
 ?>

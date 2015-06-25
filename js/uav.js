@@ -119,7 +119,6 @@ function listUavButton_Click(search)
 			{
 //				$(".bDiv").height("auto");
 			},
-			onReply: flexiReply,
 			sortname: "uav.marche",
 			sortorder: "asc",
 			usepager: true,

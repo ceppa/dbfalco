@@ -1,4 +1,4 @@
-<?
+<?php
 	function formatFloat($number)
 	{
 		$out="";

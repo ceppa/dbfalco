@@ -124,7 +124,6 @@ function listPlacesButton_Click(search)
 			{	
 //				$(".bDiv").height("auto");
 			},
-			onReply: flexiReply,
 			sortname: "places.name",
 			sortorder: "asc",
 			usepager: true,

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("const.php");
 require_once("util.php");
 require_once("../config.php");
@@ -241,7 +241,7 @@ function buildFleetForm($id_users=0)
 		<tr>
 			<td class="formTitle" colspan="2">fleet access</td>
 		</tr>
-	<?
+	<?php
 	foreach($rows as $row)
 	{
 		$checked=($row["id_users"]===$id_users?" checked='checked'":"");
@@ -251,10 +251,12 @@ function buildFleetForm($id_users=0)
 			<td class="right"><?=$row["description"]?></td>
 			<td class="left"><input type="checkbox" name="id_fleet[]"<?=$checked?> value="<?=$row["id_fleet"]?>"/></td>
 		</tr>
-<?	}?>
+<?php	
+        }
+?>
 	</table>
 	</form>
-<?
+<?php
 	return ob_get_clean();
 }
 

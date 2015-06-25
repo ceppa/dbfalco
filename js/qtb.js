@@ -188,7 +188,6 @@ function qtbList(id_uav)
 			{
 //				$(".bDiv").height("auto");
 			},
-			onReply: flexiReply,
 			sortname: "qtb.record_data",
 			sortorder: "desc",
 			usepager: true,

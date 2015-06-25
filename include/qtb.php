@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("const.php");
 require_once("util.php");
 require_once("../config.php");
@@ -211,13 +211,16 @@ function qtbUavMenu()
 		{
 ?>
 <div id="div_QtbUavSelect">
-<?	
+<?php	
 		foreach($rows as $row)
-		{?><span id="UAV_<?=$row["id"]?>"><?=$row["marche"]?></span><?}
+                {?>
+                    <span id="UAV_<?=$row["id"]?>"><?=$row["marche"]?></span>
+<?php
+                }
 ?>
 	<span id="UAV_incomplete">Configuration is incomplete<div id="UAV_incomplete_details"></div></span>
 </div>
-<?
+<?php
 			$body=ob_get_clean();
 			$status=0;
 		}

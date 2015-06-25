@@ -123,7 +123,10 @@ function listAirportsButton_Click(search)
 	resetButtons();
 }
 
-
+function flexiReply()
+{
+    
+}
 
 function airports_row_selected(itemId,row,grid)
 {
@@ -154,7 +157,7 @@ function airportsDelete()
 			function(data) 
 			{
 				data=getData(data);
-				if(data.length==0)
+				if(data.length===0)
 					return;
 				var status=parseInt(data.status);
 				var message=data.message;
@@ -212,7 +215,7 @@ function airports_form_submit()
 
 function airports_form_cancel()
 {
-	if($("#active_flexi").val()!="airports")
+	if($("#active_flexi").val()!=="airports")
 		listAirportsButton_Click(false);
 	else
 		showDiv("div_flexi");

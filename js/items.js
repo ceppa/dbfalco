@@ -188,7 +188,6 @@ function listItemsButton_Click(search)
 			{	
 //				$(".bDiv").height("auto");
 			},
-			onReply: flexiReply,
 			sortname: "fleet.description,places.name,parts.pn",
 			sortorder: "asc",
 			usepager: true,

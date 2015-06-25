@@ -148,7 +148,6 @@ function listMovementsButton_Click(search)
 			{
 //				$(".bDiv").height("auto");
 			},
-			onReply: flexiReply,
 			sortname: "movements.date",
 			sortorder: "desc",
 			usepager: true,
@@ -173,7 +172,6 @@ function listMovementsButton_Click(search)
 	showDiv("div_flexi");
 	resetButtons();
 }
-
 
 
 function movements_row_selected(itemId,row,grid)
@@ -471,23 +469,34 @@ function updateBsd(value)
 			$('select[name^="bsd"]').remove();
 		else
 		{
+			var id_parts_array=[];
 			var id_items=$("input[name^='chk']");
 			for(var i=0;i<id_items.length;i++)
 			{
 				var splitted=id_items[i].name.split("_");
 				var ni=splitted[0].substr(3);
 				var id_parts=splitted[1];
+				id_parts_array.push(id_parts);
 				var index=splitted[2];
 				var act_bsd_select=bsd_select.replace(/{id_parts}/g,id_parts).replace(/{index}/g,index).replace(/{ni}/g,ni);
 				var bsd_cell=$(id_items[i]).parent().parent().find("td:last");
 				bsd_cell.html(act_bsd_select);
 			}
+			id_parts_array= $.unique(id_parts_array);
 
-			var id_parts=$("input[id^='id_parts_']");
+/*
+			var id_parts_array=$("input[id^='id_parts_']");
 			id_parts_list="";
-			for(var i=0;i<id_parts.length;i++)
-				if(id_parts[i].value>0)
-					id_parts_list+=String(id_parts[i].value)+",";
+			for(var i=0;i<id_parts_array.length;i++)
+				if(id_parts_array[i].value>0)
+					id_parts_list+=String(id_parts_array[i].value)+",";
+			if(id_parts_list.length)
+				id_parts_list=id_parts_list.substr(0,id_parts_list.length-1);
+*/
+			id_parts_list="";
+			for(var i=0;i<id_parts_array.length;i++)
+				if(id_parts_array[i]>0)
+					id_parts_list+=String(id_parts_array[i])+",";
 			if(id_parts_list.length)
 				id_parts_list=id_parts_list.substr(0,id_parts_list.length-1);
 
@@ -855,6 +864,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						var id_places_types=Number(($('#id_places_from').val().split("_")[1]));
 						data=getData(data);
 						var bsdCombo=data.bsdCombo;
+						var itemsSons=data.itemsSons;
 						if(id_places_types>1)
 						{
 							var ownCombo=buildCombo(data.owners);
@@ -887,55 +897,55 @@ function fillSnFromPn(n,id_parts,id_items)
 						var Owner=null;
 						for(i=0;i<data.length;i++)
 						{
-							if(Location==null)
+							if(Location===null)
 								Location=data[i].location;
 							else
 							{
-								if(data[i].location!=Location)
+								if(data[i].location!==Location)
 									showLocation=true;
 							}
-							if(Position==null)
+							if(Position===null)
 								Position=data[i].position;
 							else
 							{
-								if(data[i].position!=Position)
+								if(data[i].position!==Position)
 									showPosition=true;
 							}
-							if(id_places_types==1)
+							if(id_places_types===1)
 							{
-								if(LicenceName==null)
+								if(LicenceName===null)
 									LicenceName=data[i].licence_name;
 								else
 								{
-									if(data[i].licence_name!=LicenceName)
+									if(data[i].licence_name!==LicenceName)
 										showLicenceName=true;
 								}
-								if(LicenceNumber==null)
+								if(LicenceNumber===null)
 									LicenceNumber=data[i].licence_number;
 								else
 								{
-									if(data[i].licence_number!=LicenceNumber)
+									if(data[i].licence_number!==LicenceNumber)
 										showLicenceNumber=true;
 								}
-								if(LicenceProg==null)
+								if(LicenceProg===null)
 									LicenceProg=data[i].licence_prog;
 								else
 								{
-									if(data[i].licence_prog!=LicenceProg)
+									if(data[i].licence_prog!==LicenceProg)
 										showLicenceProg=true;
 								}
-								if(LicenceType==null)
+								if(LicenceType===null)
 									LicenceType=data[i].licence_type;
 								else
 								{
-									if(data[i].licence_type!=LicenceType)
+									if(data[i].licence_type!==LicenceType)
 										showLicenceType=true;
 								}
-								if(Owner==null)
+								if(Owner===null)
 									Owner=data[i].owner;
 								else
 								{
-									if(data[i].owner!=Owner)
+									if(data[i].owner!==Owner)
 										showOwner=true;
 								}
 							}
@@ -943,7 +953,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						var realHeader=snHeader;
 						var realniRow=niRow;
 						var actRow=snRow;
-						if(showLocation==false)
+						if(showLocation===false)
 						{
 							realniRow=realniRow.replace(/<td>{fromlocation}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>from location<\/td>/g,"");
@@ -952,7 +962,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						else
 							realniRow=realniRow.replace(/{fromlocation}/g,"");
 
-						if(showPosition==false)
+						if(showPosition===false)
 						{
 							realniRow=realniRow.replace(/<td>{fromposition}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>from position<\/td>/g,"");
@@ -960,7 +970,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						}
 						else
 							realniRow=realniRow.replace(/{fromlocation}/g,"");
-						if(showLicenceName==false)
+						if(showLicenceName===false)
 						{
 							realniRow=realniRow.replace(/<td>{licence_name}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>licence name<\/td>/g,"");
@@ -968,7 +978,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						}
 						else
 							realniRow=realniRow.replace(/{licence_name}/g,licence_name_input);
-						if(showLicenceNumber==false)
+						if(showLicenceNumber===false)
 						{
 							realniRow=realniRow.replace(/<td>{licence_number}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>licence number<\/td>/g,"");
@@ -976,7 +986,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						}
 						else
 							realniRow=realniRow.replace(/{licence_number}/g,licence_number_input);
-						if(showLicenceProg==false)
+						if(showLicenceProg===false)
 						{
 							realniRow=realniRow.replace(/<td>{licence_prog}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>licence prog<\/td>/g,"");
@@ -984,7 +994,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						}
 						else
 							realniRow=realniRow.replace(/{licence_prog}/g,licence_prog_input);
-						if(showLicenceType==false)
+						if(showLicenceType===false)
 						{
 							realniRow=realniRow.replace(/<td>{licence_type}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>licence type<\/td>/g,"");
@@ -992,7 +1002,7 @@ function fillSnFromPn(n,id_parts,id_items)
 						}
 						else
 							realniRow=realniRow.replace(/{licence_type}/g,licence_types_combo);
-						if(showOwner==false)
+						if(showOwner===false)
 						{
 							realniRow=realniRow.replace(/<td>{owner}<\/td>/g,"");
 							realHeader=realHeader.replace(/<td>owner<\/td>/g,"");
@@ -1009,7 +1019,7 @@ function fillSnFromPn(n,id_parts,id_items)
 
 						for(i=0;i<data.length;i++)
 						{
-							var checked=(id_items==data[i].id?" checked='checked'":"");
+							var checked=(id_items===data[i].id?" checked='checked'":"");
 							var displayqty=(data[i].sn.length>0);
 							var displayqtystring="";
 							if(displayqty)
@@ -1039,6 +1049,13 @@ function fillSnFromPn(n,id_parts,id_items)
 							realactRow=realactRow.replace(/{displayqty}/g,displayqtystring);
 							realactRow=realactRow.replace(/{qty}/g,qty);
 							$(table).append(realactRow);
+
+							if($.type(itemsSons[data[i].id])==="object")
+							{
+								//item has sons
+								appendSons(id_parts,data[i].id,itemsSons[data[i].id]);
+							}
+
 						}
 
 						if(id_places_types>1)
@@ -1139,6 +1156,11 @@ function fixQtyRo(sender)
 function checkboxClick(sender,table,n)
 {
 	var count=0;
+	var rs=$($(sender).closest("td")).attr("rowspan");
+	if(rs=="2")
+		$($(sender).closest("tr")).next().find(":checkbox").prop("checked",sender.checked);
+
+
 	$(table).find(":checkbox").each(function(key,value)
 	{
 		if(this.checked)
@@ -1326,7 +1348,7 @@ function validate_movements_sn()
 
 	for(var i=0;i<chkni.length;i++)
 	{
-		var ni=$("input[name='snni_"+chkni[i].name.substr(6)+"']");
+		var ni=($("input[name='snni_"+chkni[i].name.substr(6)+"']"));
 		ni.val($.trim(ni.val()));
 		if(ni.val().length)
 		{
@@ -1417,7 +1439,7 @@ function validate_movements_documents()
 		var desc=$("#movement_documents input[name='docdesc_"+n+"']")[0];
 		$(desc).removeClass("error");
 
-		if((files[i].value!="")&&(desc.value==""))
+		if((files[i].value!=="")&&(desc.value===""))
 		{
 			$(desc).addClass("error");
 			ok=false;
@@ -1429,33 +1451,116 @@ function validate_movements_documents()
 function validate_movements_details()
 {
 	var checkboxes=$('#movement_details input[name^="chk"]');
-	var ok=false;
+	var ok=true;
+	var count=0;
+
 	checkboxes.each(function()
 		{
 			var splitted=this.name.split("_");
 			var id_parts=splitted[1];
 			var bsd_select_name="bsd"+splitted[0].substr(3)+"_"+id_parts+"_"+splitted[2];
+			var location_input_name="loc"+splitted[0].substr(3)+"_"+id_parts+"_"+splitted[2];
+			var position_input_name="pos"+splitted[0].substr(3)+"_"+id_parts+"_"+splitted[2];
 			var bsd_select=$('select[name="'+bsd_select_name+'"]');
 			if(this.checked)
 			{
-				if((bsd_select.length==1)&&(bsd_select[0].value==0))
-					bsd_select.addClass("error");
-				else
+				var td=$(this).closest("td");
+				if(td.attr("rowspan")==="2")
 				{
-					bsd_select.removeClass("error");
-					ok=true;
+					var thisRow=td.closest("tr");
+					var nextRow=thisRow.next();
+					nextRow.find("input[name^='loc_']").val($('input[name="'+location_input_name+'"]').val());
+					nextRow.find("input[name^='pos_']").val($('input[name="'+position_input_name+'"]').val());
 				}
+				count++;
+				if((bsd_select.length===1)&&(Number(bsd_select[0].value)===0))
+				{
+					bsd_select.addClass("error");
+					ok=false;
+				}
+				else
+					bsd_select.removeClass("error");
 			}
 			else
 				bsd_select.removeClass("error");
 
 		});
-	if(ok==false)
+	if(count===0)
+	{
 		notify(1,"no items to move");
+		ok=false;
+	}
 	return ok;
 }
 
 function showDoc(id_documents)
 {
 	window.open("include/movements.php?op=showDoc&id_documents="+id_documents);
+}
+
+function appendSons(id_parts,id_items,itemSons)
+{
+	var chk=$("input[name='chk_"+id_parts+"_"+id_items+"']");
+	var chktd=chk.closest("td");
+	var currentRow=chktd.closest("tr");
+	var colnumber=currentRow.children('td').length;
+	var sonsObject=$("<table>").append
+		(
+			$("<tr>").append
+			(
+				$("<td>"),
+				$("<td>").text("pn"),
+				$("<td>").text("description"),
+				$("<td>").text("sn"),
+				$("<td>").text("BSD")
+			)
+		);
+
+	sonsObject=buildSons(sonsObject,itemSons,"-");
+	if($.type(sonsObject)==="object")
+	{
+		chktd.attr("rowspan","2");
+		sonsObject.find(":checkbox").prop('checked',chk[0].checked);
+		currentRow.after
+		(
+			$("<tr>").append
+			(
+				$("<td>").attr("colspan",colnumber-1).append(sonsObject)
+			)
+		)
+	}
+}
+
+function buildSons(sonsObject,itemSons,separator)
+{
+	$.each( itemSons, function( key, value )
+	{
+		displaySons=true;
+		sonsObject.append
+		(
+			$("<tr>").append
+			(
+				$("<td>").append
+				(
+					separator,
+					$("<input>").attr("type","checkbox").attr("name","chk_"+value.id_parts+"_"+key),
+					$("<input>").attr("type","hidden").attr("name","qty_"+value.id_parts+"_"+key).val("1"),
+					$("<input>").attr("type","hidden").attr("name","loc_"+value.id_parts+"_"+key).val(""),
+					$("<input>").attr("type","hidden").attr("name","pos_"+value.id_parts+"_"+key).val("")
+				),
+				$("<td>").text(value.pn),
+				$("<td>").text(value.description),
+				$("<td>").append($("<input>")
+							.attr("type","hidden")
+							.attr("name","snni_"+value.id_parts+"_"+key)
+							.val(value.sn))
+						.append(value.sn),
+				$("<td>").text("")
+			)
+		);
+		if($.type(value.son)==="object")
+			sonsObject=buildSons(sonsObject,value.son,"-"+separator);
+
+	});
+	return sonsObject;
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("const.php");
 require_once("util.php");
 require_once("../config.php");
@@ -14,8 +14,8 @@ if($op=='list')
 		$where="WHERE 1";
 
 	require_once("mysql.php");
-	$page = $_POST['page'];
-	$rp = $_POST['rp'];
+	$page = filter_input(INPUT_POST,'page');
+	$rp = filter_input(INPUT_POST,'rp');
 	$sortname = $_POST['sortname'];
 	$sortorder = $_POST['sortorder'];
 

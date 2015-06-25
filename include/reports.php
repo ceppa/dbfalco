@@ -1,4 +1,4 @@
-<?
+<?php
 
 	$query_items_life_having='';
 

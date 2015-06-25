@@ -1,22 +1,23 @@
-<?
+<?php
 function drawTable($rows,$columns)
 {
 ?>
 	<table class="center">
 		<tr class="header">
-<?
+<?php
 	foreach($columns as $array)
 	{
 		$text=$array["title"];
 	?>
 			<td><?=$text?></td>
-	<?}?>
+	<?php
+        }?>
 
-<?
+<?php
 	foreach($rows as $row)
 	{?>
 		<tr class="row">
-	<?
+	<?php
 		foreach($columns as $field=>$array)
 		{
 			if(strlen($array["align"]))
@@ -25,12 +26,13 @@ function drawTable($rows,$columns)
 				$align="left";
 		?>
 			<td style="text-align:<?=$align?>"><?=$row[$field]?></td>
-		<?}?>
+		<?php
+                }?>
 		</tr>
-<?	}?>
+<?php	}?>
 		</tr>
 	</table>
-<?
+<?php
 }
 
 function tableRow($readonly,$type,$title,$value)
@@ -49,7 +51,7 @@ function tableRow($readonly,$type,$title,$value)
 	<tr <?=$locked_row?> id="row_<?=$varname?>">
 		<td class="right"><?=$title?></td>
 		<td class="left">
-			<?
+<?php
 		switch($type["type"])
 		{
 			case "select":
@@ -60,12 +62,13 @@ function tableRow($readonly,$type,$title,$value)
 						name="<?=$varname?>"
 						value="<?=$varvalue?>" />
 						<b><?=$values[$varvalue]?></b>
-				<?}
+				<?php
+                                }
 				else
 				{?>
 					<select id="<?=$varname?>"
 						name="<?=$varname?>">
-					<?
+					<?php
 						foreach($values as $id=>$value)
 						{
 							$selected=(strlen($varvalue)&&($varvalue==$id));
@@ -73,9 +76,11 @@ function tableRow($readonly,$type,$title,$value)
 						<option value="<?=$id?>"<?=($selected?" selected='selected'":"")?>>
 							<?=$value?>
 						</option>
-						<?}?>
+						<?php
+                                                }?>
 					</select>
-				<?}
+				<?php
+                                }
 				break;
 			case "textarea":
 				$cols=$type["cols"];
@@ -84,7 +89,7 @@ function tableRow($readonly,$type,$title,$value)
 					<textarea name="<?=$varname?>" cols="<?=$cols?>" rows="<?=$rows?>"
 						class="input"<?=$input_locked?>><?=$varvalue?>
 					</textarea>
-				<?
+				<?php
 				break;
 			case "input":
 				$maxlength=$type["maxlength"];
@@ -97,7 +102,7 @@ function tableRow($readonly,$type,$title,$value)
 						maxlength="<?=$maxlength?>" 
 						value="<?=$varvalue?>" 
 						<?=$input_locked?> />
-				<?
+				<?php
 				break;
 			case "date":
 			?>
@@ -109,7 +114,7 @@ function tableRow($readonly,$type,$title,$value)
 						onclick='showCalendar("", this,this, "dd/mm/yyyy","it",1,0)'
 						onchange="" 
 						readonly="readonly" />
-			<?
+			<?php
 				if(!$readonly)
 				{?>
 					<img src="img/calendar.png" 
@@ -117,9 +122,9 @@ function tableRow($readonly,$type,$title,$value)
 						alt="calendar"
 						style="height:25px;vertical-align:middle;"
 						onclick='showCalendar("", this,document.getElementById("<?=$varname?>"), "dd/mm/yyyy","it",1,0)' />
-			<?	}?>
+			<?php	}?>
 				</td>
-				<?
+				<?php
 				break;
 			case "multicheck":
 				$values=$type["values"];
@@ -130,7 +135,8 @@ function tableRow($readonly,$type,$title,$value)
 				{?>
 					<input type="checkbox" onchange="check_all(this,'<?=$varname?>')">All<br/>
 
-				<?}
+				<?php
+                                }
 				$varvalue=(int)$varvalue;
 				foreach($values as $id=>$value)
 				{
@@ -141,7 +147,7 @@ function tableRow($readonly,$type,$title,$value)
 					<input type="checkbox"
 						name="<?=$varname;?>_<?=$k;?>"
 						value="<?=$id;?>"<?=$check_locked?><?=$checked?> /><?=$value;?><br/>
-					<?
+					<?php
 				}
 				break;
 			default:
@@ -149,7 +155,7 @@ function tableRow($readonly,$type,$title,$value)
 		}?>
 		</td>
 	</tr>
-<?
+<?php
 }
 
 function rrmdir($dir)

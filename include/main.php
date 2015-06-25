@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("const.php");
 require_once("../config.php");
 
@@ -6,7 +6,7 @@ function display_admin_nav()
 {
 ?>
 <ul id="jd_menu" class="jd_menu">
-<?
+<?php
 if($_SESSION["livello"]>1)
 {?>
 	<li id="jd_fleet"><a>Fleet</a>
@@ -27,16 +27,18 @@ if($_SESSION["livello"]>1)
 	</li>
 	<li id="jd_admin"><a>Admin</a>
 		<ul>
-<?
+<?php
 if($_SESSION["livello"]>2)
 {?>
 			<li id="menu_users_list"><a>Users</a></li>
-<?}?>
+<?php
+}?>
 			<li id="menu_airports_list"><a>Airports</a></li>
 			<li id="menu_crew_list"><a>Crew</a></li>
 		</ul>
 	</li>
-<?}
+<?php
+}
 if($_SESSION["warehouse"]==1)
 {?>
 	<li id="jd_parts" class="warehouse"><a>Parts</a>
@@ -70,7 +72,8 @@ if($_SESSION["warehouse"]==1)
 			<li id="menu_places_search"><a>Search</a></li>
 		</ul>
 	</li>
-<?}
+<?php
+}
 if($_SESSION["qtb"]==1)
 {?>
 	<li id="jd_qtb" class="qtb"><a>UTL</a>
@@ -78,7 +81,8 @@ if($_SESSION["qtb"]==1)
 			<li id="menu_qtb_list"><a>List</a></li>
 		</ul>
 	</li>
-<?}?>
+<?php
+}?>
 	<li id="jd_reports"><a>Reports</a>
 		<ul>
 			<li id="menu_reports_UAVpartslife"><a>UAV parts life</a></li>
@@ -93,7 +97,7 @@ if($_SESSION["qtb"]==1)
 	</li>
 </ul>
 
-<?
+<?php
 }
 
 $op = $_REQUEST['op'];

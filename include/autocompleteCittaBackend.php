@@ -1,4 +1,4 @@
-<?
+<?php
 require_once('mysql.php');
 
 $q = strtolower($_GET["q"]);

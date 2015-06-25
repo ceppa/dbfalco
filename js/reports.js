@@ -2,18 +2,19 @@ function menu_reports_inventory_click()
 {
 	var id_fleet=getSessionValue("id_fleet");
 
-
-	var campi={ Description : 'parts.description'
-			, pn: 'parts.pn'
-			, Licence_Type : 'licence_types.description'
-			, Licence_Number: 'items_grouped.licence_number'
-			, Qty: "COUNT(DISTINCT items_grouped.id)"
-			, Serial_Number: 'items_grouped.sn'
-			, Property: 'owners.description'
-			, Fleet: 'fleet.description'
-			, Place: 'places.name'
-			, Location: 'items_grouped.location'
-			, Position: 'items_grouped.position'
+	var campi=
+		{
+			Description : 'parts.description',
+			pn: 'parts.pn',
+			Licence_Type : 'licence_types.description',
+			Licence_Number: 'items_grouped.licence_number',
+			Qty: "COUNT(DISTINCT items_grouped.id)",
+			Serial_Number: 'items_grouped.sn',
+			Property: 'owners.description',
+			Fleet: 'fleet.description',
+			Place: 'places.name',
+			Location: 'items_grouped.location',
+			Position: 'items_grouped.position'
 		};
 
 	var options=$('<select></select>');
@@ -475,7 +476,7 @@ function menu_reports_bsd_click()
 	{
 		if($('#div_QtbUavSelect a').length==0)
 			$('<a></a>').attr('href','#').addClass('button').text('export to csv').click(function(){
-				exportTableToCSV.apply(this, [$('#BSDReportContent'), 'export.csv']);
+				exportTableToCSV.apply(this, [$('#BSDReportContent'), 'export.csv',3]);
 				}).appendTo($("#div_QtbUavSelect"));
 
 		$("#div_QtbUavSelect span").unbind("click").click(function()

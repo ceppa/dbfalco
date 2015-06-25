@@ -1,4 +1,4 @@
-<?
+<?php
 function emailHtml($from, $subject, $message, $to) 
 {
 	require_once("Mail.php");

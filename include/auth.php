@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("const.php");
 require_once("../config.php");
 
@@ -72,7 +72,7 @@ function show_login()
 		</tr>
 	</table>
 
-<?
+<?php
 }
 
 
@@ -265,7 +265,7 @@ elseif($op=="show_forgotten")
 	Inserire il proprio nome utente e l'indirizzo e-mail associato<br>
 	verrà inviata una mail contenente la nuova password all'indirizzo specificato<br>
 	</div>
-<?
+<?php
 }
 elseif($op=="post_forgotten")
 {
@@ -363,7 +363,8 @@ elseif($op=="show_expired")
 			</td>
 		</tr>
 	</table>
-<?}
+<?php
+}
 elseif($op=="post_new_password")
 {
 	require_once("mysql.php");

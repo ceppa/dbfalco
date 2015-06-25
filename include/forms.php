@@ -1,4 +1,4 @@
-<?
+<?php
 function buildPostQuery($edit)
 {
 	$table=$_POST["form_table"];
@@ -67,7 +67,7 @@ function showForm($id,$table,$fields,$title="")
 		</td>
 	</tr>
 
-<?
+<?php
 	$conn=new mysqlConnection;
 /*	foreach($fields as $name=>$details)
 		$fields[$name]["value"]="";*/
@@ -354,7 +354,7 @@ function showForm($id,$table,$fields,$title="")
 			</span>
 		</td>
 	</tr>
-<?
+<?php
 		}
 	}
 ?>	
@@ -363,7 +363,7 @@ function showForm($id,$table,$fields,$title="")
 <?=$idtext?>
 <?=$hiddenfields?>
 </form>
-<?
+<?php
 
 	$conn=null;
 }
